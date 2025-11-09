@@ -4,20 +4,72 @@ import { SITE } from "@/siteConfig";
 import Introduction from "@/components/Introduction.astro";
 import IconLink from "@/components/IconLink.astro";
 import CustomLink from "@/components/CustomLink.astro";
+
+// Group links
+let groupedLinks = SITE.customLinks.reduce((acc, link) => {
+  const group = link.group || "";
+  if (!acc[group]) acc[group] = [];
+  acc[group].push(link);
+  return acc;
+}, {} as Record<string, typeof SITE.customLinks>);
+
+// Build group order map
+const groupOrderMap = Object.fromEntries(
+  (SITE.linkGroups ?? []).map(g => [g.name, g.order])
+);
+
+// If latest = false → remove groups where order < 0
+if (!SITE.latest) {
+  groupedLinks = Object.fromEntries(
+    Object.entries(groupedLinks).filter(([groupName]) => {
+      const gOrder = groupOrderMap[groupName];
+      return gOrder === undefined || gOrder >= 0; // keep only >= 0
+    })
+  );
+}
+
+// Sort inside each group
+for (const group in groupedLinks) {
+  groupedLinks[group].sort((a, b) => {
+    return (a.order ?? Infinity) - (b.order ?? Infinity);
+  });
+}
+
+// Sort groups by order
+const sortedGroups = Object.keys(groupedLinks).sort((a, b) => {
+  return (groupOrderMap[a] ?? Infinity) - (groupOrderMap[b] ?? Infinity);
+});
 ---
 
 <Introduction />
+
 <ul class="flex justify-center gap-4 py-12">
   {
-    SITE.iconLinks.map((link) => {
-      return <IconLink url={link.url} icon={link.icon} />;
-    })
+    SITE.iconLinks.map((link) => (
+      <IconLink url={link.url} icon={link.icon} />
+    ))
   }
 </ul>
-<ul class="grid gap-y-6 pb-12 pt-4">
+
+<div class="pb-12 pt-4">
   {
-    SITE.customLinks.map((link) => {
-      return <CustomLink url={link.url}>{link.title}</CustomLink>;
-    })
+    sortedGroups.map((group) => (
+      <div class="mb-8 last:mb-0">
+        {group && (
+          <h2 class="mb-4 text-center text-xl font-semibold text-lightModeForeground dark:text-darkModeForeground">
+            {group}
+          </h2>
+        )}
+        <ul class="grid gap-y-6">
+          {
+            groupedLinks[group].map((link) => (
+              <CustomLink url={link.url} color={link.color}>
+                {link.title}
+              </CustomLink>
+            ))
+          }
+        </ul>
+      </div>
+    ))
   }
-</ul>
+</div>

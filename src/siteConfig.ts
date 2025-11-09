@@ -6,8 +6,10 @@ export interface SiteConfiguration {
   profilePicture: string;
   url: string;
   blog: boolean;
+  latest?: boolean;
   iconLinks: IconLink[];
   customLinks: CustomLink[];
+  linkGroups: LinkGroups[];
 }
 
 interface IconLink {
@@ -16,10 +18,18 @@ interface IconLink {
   url: string;
 }
 
+interface LinkGroups {
+  name: string;
+  order: number
+}
+
 interface CustomLink {
   id: string;
   title: string;
   url: string;
+  group?: string;
+  order?: number;
+  color?: string;
 }
 
 export const SITE: SiteConfiguration = {

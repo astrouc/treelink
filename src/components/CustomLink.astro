@@ -1,11 +1,36 @@
 ---
-const { text, icon, url } = Astro.props;
+const { text, icon, url, color } = Astro.props;
+
+const style = color
+  ? `background-color: ${color}; color: white;`
+  : "";
 ---
 
 <li>
   <a
     href={url}
-    class="hover:bg-lightModeCustomLinkBackgroundHover dark:hover:bg-darkModeCustomLinkBackgroundHover hover:ring-lightModeCustomLinkOutlineHover dark:hover:ring-darkModeCustomLinkOutlineHover hover:text-lightModeCustomLinkTextHover dark:hover:text-darkModeCustomLinkTextHover flex items-center justify-center gap-2 rounded-full bg-lightModeCustomLinkBackground px-6 py-3 text-lg text-lightModeCustomLinkText ring-2 ring-lightModeCustomLinkOutline transition-colors dark:bg-darkModeCustomLinkBackground dark:text-darkModeCustomLinkText dark:ring-darkModeCustomLinkOutline"
+    style={style}
+    class="
+      flex items-center justify-center gap-2
+      rounded-full px-6 py-3 text-lg
+      transition-colors ring-2
+
+      /* Default background/text */
+      bg-lightModeCustomLinkBackground
+      text-lightModeCustomLinkText
+      ring-lightModeCustomLinkOutline
+      dark:bg-darkModeCustomLinkBackground
+      dark:text-darkModeCustomLinkText
+      dark:ring-darkModeCustomLinkOutline
+
+      /* Hover states */
+      hover:bg-lightModeCustomLinkBackgroundHover
+      dark:hover:bg-darkModeCustomLinkBackgroundHover
+      hover:ring-lightModeCustomLinkOutlineHover
+      dark:hover:ring-darkModeCustomLinkOutlineHover
+      hover:text-lightModeCustomLinkTextHover
+      dark:hover:text-darkModeCustomLinkTextHover
+    "
   >
     <slot />
   </a>

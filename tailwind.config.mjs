@@ -67,6 +67,10 @@ export default {
         darkModeCustomLinkTextHover:
           "rgb(var(--dark-mode-custom-link-text-hover) / <alpha-value>)",
       },
+      fontFamily: {
+        sans: ['var(--font-poppins)'],
+        cmu: ['var(--font-cmu-serif)'],
+      },
     },
   },
 };

@@ -3,18 +3,18 @@ import { Image } from "astro:assets";
 
 import { SITE } from "@/siteConfig";
 
-import profilePicture from "@/assets/profile-picture.jpg";
+import profilePicture from "@/assets/logo-ca.png";
 ---
 
 <div class="mt-8 py-4">
   <Image
     src={profilePicture}
     alt={SITE.name}
-    height={256}
-    width={256}
+    height={512}
+    width={512}
     loading="eager"
     draggable="false"
-    class="mx-auto size-32 rounded-full"
+    class="mx-auto size-60 rounded-full"
   />
   <h1 class="mt-4 text-center text-3xl font-semibold">{SITE.name}</h1>
   <p
