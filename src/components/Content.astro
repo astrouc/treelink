@@ -4,6 +4,23 @@ import { SITE } from "@/siteConfig";
 import Introduction from "@/components/Introduction.astro";
 import IconLink from "@/components/IconLink.astro";
 import CustomLink from "@/components/CustomLink.astro";
+
+// Group links by their group property
+const groupedLinks = SITE.customLinks.reduce((acc, link) => {
+  const group = link.group || "";
+  if (!acc[group]) {
+    acc[group] = [];
+  }
+  acc[group].push(link);
+  return acc;
+}, {} as Record<string, typeof SITE.customLinks>);
+
+// Sort groups so ungrouped links come first, then alphabetically by group name
+const sortedGroups = Object.keys(groupedLinks).sort((a, b) => {
+  if (a === "") return -1;
+  if (b === "") return 1;
+  return a.localeCompare(b);
+});
 ---
 
 <Introduction />
@@ -14,10 +31,21 @@ import CustomLink from "@/components/CustomLink.astro";
     })
   }
 </ul>
-<ul class="grid gap-y-6 pb-12 pt-4">
+<div class="pb-12 pt-4">
   {
-    SITE.customLinks.map((link) => {
-      return <CustomLink url={link.url}>{link.title}</CustomLink>;
-    })
+    sortedGroups.map((group) => (
+      <div class="mb-8 last:mb-0">
+        {group && (
+          <h2 class="mb-4 text-center text-xl font-semibold text-lightModeForeground dark:text-darkModeForeground">
+            {group}
+          </h2>
+        )}
+        <ul class="grid gap-y-6">
+          {groupedLinks[group].map((link) => (
+            <CustomLink url={link.url}>{link.title}</CustomLink>
+          ))}
+        </ul>
+      </div>
+    ))
   }
-</ul>
+</div>

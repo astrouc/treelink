@@ -20,6 +20,7 @@ interface CustomLink {
   id: string;
   title: string;
   url: string;
+  group?: string;
 }
 
 export const SITE: SiteConfiguration = {
